@@ -16,6 +16,7 @@ import { Buffer } from 'buffer';
 import axios from 'axios';
 import Loading from '../../Components/Modal Types/Loading';
 
+
 const MainApp = styled.div`
 display: grid;
 grid-template-columns: 2fr 1fr;
@@ -27,7 +28,7 @@ display: grid;
   grid-template-rows: 1fr 1fr;
 `
 
-const Playground = () => {
+const Playground = (props : any) => {
   const { folderId, playgroundId } = useParams();
   const { isOpen, openModal, closeModal } = useContext(ModalContext)!;
   const { folders, savePlayground } = useContext(PlaygroundContext)!;
@@ -137,6 +138,7 @@ const Playground = () => {
     setCurrentOutput(status_name + "\n\n" + final_output);
     setLoader(false);
   };
+
 
   return (
     <div>

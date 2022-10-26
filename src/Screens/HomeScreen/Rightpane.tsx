@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 import { BsTrashFill } from "react-icons/bs";
 import { AiTwotoneEdit } from "react-icons/ai";
 import { ModalContext } from "../../ModalContext/ModalContext";
@@ -13,14 +13,32 @@ interface HeaderProps {
 interface headingSize {
   readonly size: string;
 }
+
+const DarkTheme = {
+  body : '#191919',
+  card : '#2C3639',
+  mainHeading : '#F9F9F9',
+  sideHeading : '#DDDDDD',
+  paragraph : '#EFEFEF',
+  buttonText : '#FEFBF6'
+}
+const LightTheme = {
+  body : '#F9F9F9',
+  card : '#EFEFEF',
+  mainHeading : '#000000',
+  sideHeading : '#000000',
+  paragraph : '#000000',
+  buttonText : '#000000'
+}
 const StyledRightPane = styled.div`
   width: 60%;
   height: 100vh;
   padding: 2rem;
-  background: #fafafa;
+  background: ${(props) => props.theme.body};
   position: absolute;
   right: 0;
   top: 0;
+  color : ${(props) => props.theme.mainHeading};
 `;
 
 const Header = styled.div<HeaderProps>`
@@ -58,6 +76,7 @@ const AddButton = styled.button`
   border: 0;
   font-size: 1.1rem;
   cursor: pointer;
+  color : ${(props) => props.theme.mainHeading};
   span {
     font-weight: 700;
   }
@@ -84,6 +103,7 @@ const PlaygroundCard = styled.div`
   align-items: center;
   padding: 0.6rem;
   gap: 2rem;
+  background-color : ${(props) => props.theme.body};
   box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
   cursor : pointer;
   transition : all 0.1s ease
@@ -99,6 +119,7 @@ const SmallImage = styled.img`
 const CardContent = styled.div`
   flex-grow: 1;
   margin-left: -20px;
+  color : ${(props) => props.theme.sideHeading};
 
   h5 {
     font-weight: 400;
@@ -130,8 +151,15 @@ const RightPane = () => {
   const { deleteCard, deleteFolder } = PlaygroundFeatures;
 
   const navigate = useNavigate();
+  // DarkMode Switch
+  const [isDarkModeOn, setIsDarkModeOn] = React.useState(false);
+
+  function handleTheme(){
+    setIsDarkModeOn(!isDarkModeOn);
+  }
 
   return (
+    <ThemeProvider theme={!isDarkModeOn ? DarkTheme : LightTheme}>
     <StyledRightPane>
       <Header variant="primary">
         <Heading size="main">
@@ -152,7 +180,7 @@ const RightPane = () => {
           {" "}
           + New Folder
         </AddButton>
-        {/* <DarkMode /> */}
+        <button onClick={handleTheme}>Theme</button>
       </Header>
 
       {Object.entries(Folders).map(
@@ -243,6 +271,7 @@ const RightPane = () => {
         )
       )}
     </StyledRightPane>
+    </ThemeProvider>
   );
 };
 
