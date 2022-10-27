@@ -8,9 +8,12 @@ import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import Page404 from "./Screens/Page404";
 
 
-
 function App() {
+
+  
+
   return (
+    
     <PlaygroundProvider>
       <ModalProvider>
         <GlobalStyle />

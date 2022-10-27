@@ -1,8 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components'
+import { DarkModeContext } from '../../DarkModeContext/DarkModeContext';
+import DarkModeToggleButton from '../HomeScreen/DarkModeToggleButton';
 
 const NavbarContainer = styled.div`
+width : '7vw';
 height : 4.5rem;
 background : #241f21;
 display : flex;
@@ -36,6 +39,14 @@ span{
 function Navbar() {
 
   const navigate = useNavigate();
+  // DarkMode Switch
+  const darkTheme = React.useContext(DarkModeContext)!;
+  let isDarkThemeOn = darkTheme.isDarkModeOn;
+  let SetIsDarkThemeOn = darkTheme.setIsDarkModeOn;
+
+  function changeTheme(){
+    SetIsDarkThemeOn(!isDarkThemeOn);
+  }
   return (
     <NavbarContainer>
       <NavbarContent onClick={() => {
@@ -46,6 +57,7 @@ function Navbar() {
           <span>Code</span>Deck
         </MainHeading>
       </NavbarContent>
+      <DarkModeToggleButton changeTheme ={changeTheme} />
     </NavbarContainer>
   )
 }

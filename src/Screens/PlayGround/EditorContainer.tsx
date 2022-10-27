@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled  from "styled-components";
 import CodeEditor from "./CodeEditor";
 import { MdFullscreen } from "react-icons/md";
 import { CgImport } from "react-icons/cg";
@@ -10,12 +10,17 @@ import { Console } from "console";
 import { ModalContext } from "../../ModalContext/ModalContext";
 import { languageMap } from "../../ModalContext/PlaygroundContext";
 
+import {DarkModeContext} from '../../DarkModeContext/DarkModeContext'
+import { ThemeProvider } from "styled-components";
+import  {DarkTheme, LightTheme} from '../../DarkModeContext/DarkModes'
+
 const StyledEditorContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
 const UpperToolbar = styled.div`
-  background: white;
+  background: ${(props => props.theme.body)};
+  color: ${(props => props.theme.mainHeading)};
   height: 4rem;
   display: flex;
   align-items: center;
@@ -34,6 +39,7 @@ const Title = styled.div`
   }
 
   button {
+    color: ${(props => props.theme.mainHeading)};
     background: transparent;
     font-size: 1.3rem;
     margin-top : 6px;
@@ -43,7 +49,8 @@ const Title = styled.div`
 `;
 
 const LowerToolbar = styled.div`
-  background: white;
+background: ${(props => props.theme.body)};
+color: ${(props => props.theme.mainHeading)};
   height: 4rem;
   display: flex;
   align-items: center;
@@ -51,6 +58,7 @@ const LowerToolbar = styled.div`
   padding: 0.3rem;
 
   button, label {
+    color: ${(props => props.theme.mainHeading)};
     background: transparent;
     outline: 0;
     border: 0;
@@ -84,10 +92,10 @@ const SaveCodeButton = styled.button`
   padding: 0.5rem 0.8rem;
   text-align : center;
   font-size : 1rem;
-  background-color: white !important;
-  color: #0097d7;
+  background: ${(props => props.theme.body)};
+    color: ${(props => props.theme.mainHeading)};
   font-weight: 700;
-  border: 1px solid #0097d7;
+  border: 1px solid green;
   margin-right: 0.5rem auto;
   cursor: pointer;
   transition: 0.5s ease;
@@ -103,12 +111,13 @@ const SelectBars = styled.div`
   align-items: center;
   gap: 1rem;
   margin-right : 25px;
-
   & > div:nth-of-type(1) {
     width: 8rem;
+    color: black !important;
   }
   & > div:nth-of-type(2) {
     width: 10rem;
+    color: black !important;
   }
 `;
 interface EditorContainerProps {
@@ -203,7 +212,28 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
   // Full Screen for code editor
   const [fullScreen, setFullScreen] = useState(false);
 
+  function handleFullScreen(){
+    setFullScreen(!fullScreen);
+  }
+
+  // DarkTheme Functionality
+
+  const darkTheme = React.useContext(DarkModeContext)!;
+
+  let isDarkThemeOn = darkTheme.isDarkModeOn;
+  let SetIsDarkThemeOn = darkTheme.setIsDarkModeOn;
+
+  function changeTheme(){
+    SetIsDarkThemeOn(!isDarkThemeOn);
+    console.log("Clicked");
+  }
+  console.log(isDarkThemeOn);
+  
+
   return (
+    <ThemeProvider theme={isDarkThemeOn ? DarkTheme : LightTheme}>
+
+
     <StyledEditorContainer>
       <UpperToolbar>
         <Title>
@@ -242,7 +272,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
         </SelectBars>
       </UpperToolbar>
 
-      {/* <InsideCodeEditor> */}
       <CodeEditor
         currentLanguage={selectedLang.value}
         currentTheme={selectedTheme.value}
@@ -250,12 +279,11 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
         setCurrentCode={setCurrentCode}
         fullScreen = {fullScreen}
       />
-      {/* </InsideCodeEditor> */}
 
       <LowerToolbar>
         <ButtonGroup>
           <button>
-            <MdFullscreen />
+            <MdFullscreen onClick={() =>handleFullScreen()}/>
             Full Screen
           </button>
           <label>
@@ -279,6 +307,7 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           >Run Code</RunCodeButton>
       </LowerToolbar>
     </StyledEditorContainer>
+    </ThemeProvider>
   );
 };
 

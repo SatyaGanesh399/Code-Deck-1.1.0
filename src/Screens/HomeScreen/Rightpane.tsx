@@ -5,6 +5,9 @@ import { AiTwotoneEdit } from "react-icons/ai";
 import { ModalContext } from "../../ModalContext/ModalContext";
 import { PlaygroundContext } from "../../ModalContext/PlaygroundContext";
 import { useNavigate } from "react-router-dom";
+import {DarkModeContext} from '../../DarkModeContext/DarkModeContext'
+import { DarkTheme, LightTheme } from "../../DarkModeContext/DarkModes";
+import DarkModeToggleButton from './DarkModeToggleButton'
 
 
 interface HeaderProps {
@@ -14,22 +17,7 @@ interface headingSize {
   readonly size: string;
 }
 
-const DarkTheme = {
-  body : '#191919',
-  card : '#2C3639',
-  mainHeading : '#F9F9F9',
-  sideHeading : '#DDDDDD',
-  paragraph : '#EFEFEF',
-  buttonText : '#FEFBF6'
-}
-const LightTheme = {
-  body : '#F9F9F9',
-  card : '#EFEFEF',
-  mainHeading : '#000000',
-  sideHeading : '#000000',
-  paragraph : '#000000',
-  buttonText : '#000000'
-}
+
 const StyledRightPane = styled.div`
   width: 60%;
   height: 100vh;
@@ -42,6 +30,7 @@ const StyledRightPane = styled.div`
 `;
 
 const Header = styled.div<HeaderProps>`
+  height : 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -59,15 +48,16 @@ const Header = styled.div<HeaderProps>`
   }
 `;
 const Heading = styled.h3<headingSize>`
+margin-top : 20px;
   font-weight: 400;
   font-size: ${(props) => (props.size === "main" ? "1.8rem" : "1.5rem")};
-
   span {
     font-weight: 700;
   }
 `;
 
 const AddButton = styled.button`
+margin-top : 20px;
   display: flex;
   gap: 0.5rem;
   align-items: center;
@@ -89,6 +79,7 @@ const AddButton = styled.button`
 const Folder = styled.div`
   margin-bottom: 0.5rem;
   margin-bottom: 2rem;
+  
 `;
 
 const CardContainer = styled.div`
@@ -103,8 +94,8 @@ const PlaygroundCard = styled.div`
   align-items: center;
   padding: 0.6rem;
   gap: 2rem;
-  background-color : ${(props) => props.theme.body};
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+  background-color : 'white';
+  box-shadow: ${(props) => props.theme.shadow};
   cursor : pointer;
   transition : all 0.1s ease
 
@@ -119,7 +110,7 @@ const SmallImage = styled.img`
 const CardContent = styled.div`
   flex-grow: 1;
   margin-left: -20px;
-  color : ${(props) => props.theme.sideHeading};
+  color : 'black';
 
   h5 {
     font-weight: 400;
@@ -129,6 +120,7 @@ const CardContent = styled.div`
 `;
 
 const Icons = styled.div`
+margin-top : 20px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -140,6 +132,7 @@ const FolderButtons = styled.div`
   display: flex;
   algn-items: center;
   justify-content: flex-end;
+  
 `;
 
 const RightPane = () => {
@@ -152,14 +145,18 @@ const RightPane = () => {
 
   const navigate = useNavigate();
   // DarkMode Switch
-  const [isDarkModeOn, setIsDarkModeOn] = React.useState(false);
+    const darkTheme = useContext(DarkModeContext)!;
+    let isDarkThemeOn = darkTheme.isDarkModeOn;
+    let SetIsDarkThemeOn = darkTheme.setIsDarkModeOn;
 
-  function handleTheme(){
-    setIsDarkModeOn(!isDarkModeOn);
-  }
+    function changeTheme(){
+      SetIsDarkThemeOn(!isDarkThemeOn);
+      console.log("Clicked");
+    }
 
   return (
-    <ThemeProvider theme={!isDarkModeOn ? DarkTheme : LightTheme}>
+    <ThemeProvider theme={isDarkThemeOn ? DarkTheme : LightTheme}>
+
     <StyledRightPane>
       <Header variant="primary">
         <Heading size="main">
@@ -180,9 +177,9 @@ const RightPane = () => {
           {" "}
           + New Folder
         </AddButton>
-        <button onClick={handleTheme}>Theme</button>
       </Header>
-
+      <DarkModeToggleButton changeTheme ={changeTheme}/>
+          
       {Object.entries(Folders).map(
         ([folderId, folder]: [foldersId: string, folder: any]) => (
           <Folder key={folderId}>

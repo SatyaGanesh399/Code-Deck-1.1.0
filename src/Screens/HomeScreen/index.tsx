@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Modal from "../../Components/Modal";
 import { ModalContext } from "../../ModalContext/ModalContext";
 
+
 const HomeScreenContainer = styled.div`
     postition : relative;
     width = 100%

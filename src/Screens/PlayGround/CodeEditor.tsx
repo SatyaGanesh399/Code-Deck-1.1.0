@@ -9,23 +9,16 @@ import { githubDark, githubLight } from "@uiw/codemirror-theme-github";
 import { darcula } from "@uiw/codemirror-theme-darcula";
 import { bespin } from "@uiw/codemirror-theme-bespin";
 
-
 import { cpp } from "@codemirror/lang-cpp";
 import { java } from "@codemirror/lang-java";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
 
-
 import { indentUnit } from "@codemirror/language";
 import { EditorState } from "@codemirror/state";
 import styled from "styled-components";
 
-const CodeEditorContainer = styled.div`
-  height: calc(100vh - 12.5rem);
-  & > div {
-    height: 100%;
-  }
-`;
+
 
 interface CodeEditorProps {
   currentLanguage : string;
@@ -34,6 +27,17 @@ interface CodeEditorProps {
   setCurrentCode: (newCode: string) => void;
   fullScreen : boolean;
 }
+interface HeaderProps {
+  readonly fullScreen: boolean;
+}
+
+const CodeEditorContainer = styled.div<HeaderProps>`
+  width : ${(props) => (props.fullScreen ? "100vw" : "auto")};
+  height: ${(props) => (props.fullScreen ? "70vh" : "calc(100vh - 12.5rem)")};
+  & > div {
+    height: 100%;
+  }
+`;
 
 const CodeEditor : React.FC<CodeEditorProps> = ({currentLanguage, currentTheme, currentCode, setCurrentCode, fullScreen}) => {
   const [theme, setTheme] = useState<any>(duotoneDark);
@@ -94,7 +98,7 @@ const CodeEditor : React.FC<CodeEditorProps> = ({currentLanguage, currentTheme, 
 
 
   return (
-    <CodeEditorContainer>
+    <CodeEditorContainer fullScreen={fullScreen}>
       <CodeMirror
          theme={theme}
          value={currentCode}
