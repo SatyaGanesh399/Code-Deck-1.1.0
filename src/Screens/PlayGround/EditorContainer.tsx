@@ -278,7 +278,6 @@ const EditorContainer: React.FC<EditorContainerProps> = ({
           />
         </SelectBars>
       </UpperToolbar>
-
       <CodeEditor
         currentLanguage={selectedLang.value}
         currentTheme={selectedTheme.value}
